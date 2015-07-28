@@ -1,0 +1,21 @@
+{
+  "name": "Glimpse",
+  "version": "1.0.0",
+  "description": "View Git information for public GitHub repositories.",
+  "author": "Michael Orchard <michael.orchard@live.co.uk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodejitsu/browsenpm.org"
+  },
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-sourcemaps": "1.5.2",
+    "vinyl-buffer": "1.0.0",
+    "vinyl-source-stream": "1.1.0",
+    "browserify": "11.0.0",
+    "watchify": "3.3.0",
+    "babelify": "6.1.3",
+    "gulp-uglify": "1.2.0"
+  },
+  "license": "MIT"
+}
