@@ -1,4 +1,3 @@
-// Credit to Dan Harper (https://gist.github.com/danharper/3ca2273125f500429945)
 var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
@@ -6,16 +5,21 @@ var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babel = require('babelify');
+var less = require('gulp-less');
 
-function compile(watch) {
-	var bundler = browserify('./src/main.js', { debug: true }).transform(babel);
+/*
+ Credit to Dan Harper for original Browserify/Babelify solution.
+ https://gist.github.com/danharper/3ca2273125f500429945
+*/
+function buildJS(watch) {
+	var src = browserify('./src/js/main.js', { debug: true }).transform(babel);
 
 	if(watch) {
-		bundler = watchify(bundler);
+		src = watchify(src);
 	}
 
-	function rebundle() {
-		bundler.bundle()
+	function build() {
+		src.bundle()
 			.on('error', function(err) { console.error(err); this.emit('end'); })
 			.pipe(source('glimpse.js'))
 			.pipe(buffer())
@@ -25,20 +29,45 @@ function compile(watch) {
 	}
 
 	if(watch) {
-		bundler.on('update', function() {
-			console.log('- Change detected. Bundling..');
-			rebundle();
+		src.on('update', function() {
+			console.log('- JavaScript change detected. Recompiling..');
+			build();
 		});
 	}
 
-	rebundle();
+	build();
+}
+
+function buildCSS(watch) {
+	var src = gulp.src('./src/less/**/*.less');
+
+	if(watch) {
+		src = watchify(src);
+	}
+
+	function build() {
+		src.pipe(less())
+			.pipe(gulp.dest('./build'));
+	}
+
+	if(watch) {
+		src.on('update', function() {
+			console.log('- CSS change detected. Recompiling..');
+			build();
+		});
+	}
+
+	build();
 }
 
 function watch() {
-	return compile(true);
+	buildJS(true);
+	buildCSS(true);
 }
 
-gulp.task('build', function() { return compile(); });
-gulp.task('watch', function() { return watch(); });
+gulp.task('build-js', function() { buildJS(false); });
+gulp.task('build-css', function() { buildCSS(false); }) ;
+gulp.task('watch', watch);
 
-gulp.task('default', ['watch']);
+gulp.task('build', ['build-js', 'build-css']);
+gulp.task('default', ['build']);
