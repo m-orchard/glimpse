@@ -11,8 +11,9 @@ import {Diff} from './react/Diff';
 
 		if(req.status === 200) {
 			var diffs = DiffFactory.parseDiffSet(req.responseText);
-			React.render(<Diff name="Michael"></Diff>, document.querySelector('.container'));
-			console.log(diffs);
+			diffs.forEach(function(diff) {
+				React.render(<Diff diff={diff}></Diff>, document.querySelector('.container'));
+			});
 		} else {
 			// show error;
 		}

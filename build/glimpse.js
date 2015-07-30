@@ -19876,6 +19876,24 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var ChangeSet = function ChangeSet(indices, lines) {
+	_classCallCheck(this, ChangeSet);
+
+	this.indices = indices;
+	this.lines = lines;
+};
+
+exports.ChangeSet = ChangeSet;
+
+},{}],158:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var Diff = function Diff(files, index, leftFile, rightFile, changeSets) {
 	_classCallCheck(this, Diff);
 
@@ -19888,7 +19906,7 @@ var Diff = function Diff(files, index, leftFile, rightFile, changeSets) {
 
 exports.Diff = Diff;
 
-},{}],158:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -19900,6 +19918,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _Diff = require('./Diff');
+
+var _ChangeSet = require('./ChangeSet');
 
 var DiffFactory = (function () {
 	function DiffFactory() {
@@ -19918,26 +19938,25 @@ var DiffFactory = (function () {
 		}
 	}, {
 		key: 'parseDiff',
-		value: function parseDiff(lines) {
-			var files = lines.shift();
-			var index = lines.shift();
-			var leftFile = lines.shift();
-			var rightFile = lines.shift();
+		value: function parseDiff(diffLines) {
+			var files = diffLines.shift();
+			var index = diffLines.shift();
+			var leftFile = diffLines.shift();
+			var rightFile = diffLines.shift();
 			var changeSets = [];
-			var changeSet;
+			var changeSetIndices;
+			var changeSetLines;
 
 			do {
-				changeSet = {
-					indices: lines.shift(),
-					lines: []
-				};
+				changeSetIndices = diffLines.shift();
+				changeSetLines = [];
 
 				do {
-					changeSet.lines.push(lines.shift());
-				} while (lines.length && lines[0].indexOf('@@') !== 0);
+					changeSetLines.push(diffLines.shift());
+				} while (diffLines.length && diffLines[0].indexOf('@@') !== 0);
 
-				changeSets.push(changeSet);
-			} while (lines.length);
+				changeSets.push(new _ChangeSet.ChangeSet(changeSetIndices, changeSetLines));
+			} while (diffLines.length);
 
 			return new _Diff.Diff(files, index, leftFile, rightFile, changeSets);
 		}
@@ -19948,7 +19967,7 @@ var DiffFactory = (function () {
 
 exports.DiffFactory = DiffFactory;
 
-},{"./Diff":157}],159:[function(require,module,exports){
+},{"./ChangeSet":157,"./Diff":158}],160:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -19970,8 +19989,9 @@ var _reactDiff = require('./react/Diff');
 
 		if (req.status === 200) {
 			var diffs = _gitDiffFactory.DiffFactory.parseDiffSet(req.responseText);
-			_react2['default'].render(_react2['default'].createElement(_reactDiff.Diff, { name: "Michael" }), document.querySelector('.container'));
-			console.log(diffs);
+			diffs.forEach(function (diff) {
+				_react2['default'].render(_react2['default'].createElement(_reactDiff.Diff, { diff: diff }), document.querySelector('.container'));
+			});
 		} else {
 			// show error;
 		}
@@ -19982,7 +20002,65 @@ var _reactDiff = require('./react/Diff');
 	req.send(null);
 })();
 
-},{"./git/DiffFactory":158,"./react/Diff":160,"react":156}],160:[function(require,module,exports){
+},{"./git/DiffFactory":159,"./react/Diff":162,"react":156}],161:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var ChangeSet = (function (_React$Component) {
+	_inherits(ChangeSet, _React$Component);
+
+	function ChangeSet() {
+		_classCallCheck(this, ChangeSet);
+
+		_get(Object.getPrototypeOf(ChangeSet.prototype), "constructor", this).apply(this, arguments);
+	}
+
+	_createClass(ChangeSet, [{
+		key: "render",
+		value: function render() {
+			var changeSet = this.props.changeSet;
+			return _react2["default"].createElement(
+				"div",
+				{ className: "change-set" },
+				_react2["default"].createElement(
+					"div",
+					{ className: "change-set-indices" },
+					changeSet.indices
+				),
+				changeSet.lines.map(function (line) {
+					return _react2["default"].createElement(
+						"div",
+						{ className: "change-set-line" },
+						line
+					);
+				})
+			);
+		}
+	}]);
+
+	return ChangeSet;
+})(_react2["default"].Component);
+
+exports.ChangeSet = ChangeSet;
+
+},{"react":156}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -20003,6 +20081,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _ChangeSet = require('./ChangeSet');
+
 var Diff = (function (_React$Component) {
 	_inherits(Diff, _React$Component);
 
@@ -20015,11 +20095,33 @@ var Diff = (function (_React$Component) {
 	_createClass(Diff, [{
 		key: 'render',
 		value: function render() {
+			var diff = this.props.diff;
 			return _react2['default'].createElement(
 				'div',
-				null,
-				'Hello ',
-				this.props.name
+				{ className: "diff", div: true },
+				_react2['default'].createElement(
+					'div',
+					{ className: "diff-files" },
+					diff.files
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: "diff-index" },
+					diff.index
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: "diff-left-file" },
+					diff.leftFile
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: "diff-right-file" },
+					diff.rightFile
+				),
+				diff.changeSets.map(function (changeSet) {
+					return _react2['default'].createElement(_ChangeSet.ChangeSet, { changeSet: changeSet });
+				})
 			);
 		}
 	}]);
@@ -20029,7 +20131,7 @@ var Diff = (function (_React$Component) {
 
 exports.Diff = Diff;
 
-},{"react":156}]},{},[159])
+},{"./ChangeSet":161,"react":156}]},{},[160])
 
 
 //# sourceMappingURL=glimpse.js.map
