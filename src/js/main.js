@@ -19,7 +19,7 @@ import {Diff} from './react/Diff';
 		}
 	};
 
-	req.open("GET", "https://api.github.com/repos/jquery/jquery/commits/1c59b308d201d6dd0f0aed2ad0256d01b9f68047", true);
+	req.open("GET", "https://api.github.com/repos/mickylad/glimpse/commits/6d975f2a78c59fc28f1740ba41da60bd62b06969", true);
 	req.setRequestHeader("Accept", "application/vnd.github.diff");
 	req.send(null);
 })();
