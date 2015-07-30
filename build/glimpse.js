@@ -19929,11 +19929,11 @@ var DiffFactory = (function () {
 	_createClass(DiffFactory, null, [{
 		key: 'parseDiffSet',
 		value: function parseDiffSet(diffSet) {
-			var diffs = diffSet.split('diff');
+			var diffs = diffSet.split('\ndiff --git');
 			diffs.shift();
 
 			return diffs.map(function (diff) {
-				return diff.split("\n");
+				return diff.split('\n');
 			}).map(DiffFactory.parseDiff);
 		}
 	}, {
