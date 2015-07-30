@@ -1,4 +1,6 @@
+import React from 'react';
 import {DiffFactory} from './git/DiffFactory';
+import {Diff} from './react/Diff';
 
 (function() {
 	var req = new XMLHttpRequest();
@@ -9,6 +11,7 @@ import {DiffFactory} from './git/DiffFactory';
 
 		if(req.status === 200) {
 			var diffs = DiffFactory.parseDiffSet(req.responseText);
+			React.render(<Diff name="Michael"></Diff>, document.querySelector('.container'));
 			console.log(diffs);
 		} else {
 			// show error;
