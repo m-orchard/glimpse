@@ -1,6 +1,6 @@
 import React from 'react';
-import {DiffFactory} from './git/DiffFactory';
-import {Diff} from './react/Diff';
+import {DiffSet as DiffSetModel} from './model/DiffSet';
+import {DiffSet} from './element/DiffSet';
 
 (function() {
 	var req = new XMLHttpRequest();
@@ -10,16 +10,14 @@ import {Diff} from './react/Diff';
 		}
 
 		if(req.status === 200) {
-			var diffs = DiffFactory.parseDiffSet(req.responseText);
-			diffs.forEach(function(diff) {
-				React.render(<Diff diff={diff}></Diff>, document.querySelector('.container'));
-			});
+			var diffSet = DiffSetModel.parse(req.responseText);
+			React.render(<DiffSet diffSet={diffSet}></DiffSet>, document.querySelector('.container'));
 		} else {
 			// show error;
 		}
 	};
 
-	req.open("GET", "https://api.github.com/repos/mickylad/glimpse/commits/6d975f2a78c59fc28f1740ba41da60bd62b06969", true);
+	req.open("GET", "https://api.github.com/repos/mickylad/glimpse/commits/359c2d9b8ef5408cd983b90a0639d0ff66c2bbea", true);
 	req.setRequestHeader("Accept", "application/vnd.github.diff");
 	req.send(null);
 })();

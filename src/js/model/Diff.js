@@ -1,17 +1,16 @@
-import {Diff} from './Diff';
 import {ChangeSet} from './ChangeSet';
 
-export class DiffFactory {
-	static parseDiffSet(diffSet) {
-		var diffs = diffSet.split('\ndiff --git');
-		diffs.shift();
-
-		return diffs.map(function(diff) {
-			return diff.split('\n');
-		}).map(DiffFactory.parseDiff);
+export class Diff {
+	constructor(files, index, leftFile, rightFile, changeSets) {
+		this.files = files;
+		this.index = index;
+		this.leftFile = leftFile;
+		this.rightFile = rightFile;
+		this.changeSets = changeSets;
 	}
 
-	static parseDiff(diffLines) {
+	static parse(diff) {
+		var diffLines = diff.split('\n');
 		var files = diffLines.shift();
 		var index = diffLines.shift();
 		var leftFile = diffLines.shift();

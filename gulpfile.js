@@ -1,11 +1,11 @@
 var gulp = require('gulp');
-var sourcemaps = require('gulp-sourcemaps');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var browserify = require('browserify');
-var watchify = require('watchify');
 var babel = require('babelify');
+var browserify = require('browserify');
+var buffer = require('vinyl-buffer');
 var less = require('gulp-less');
+var source = require('vinyl-source-stream');
+var sourcemaps = require('gulp-sourcemaps');
+var watchify = require('watchify');
 
 /*
  Credit to Dan Harper for original Browserify/Babelify solution.
