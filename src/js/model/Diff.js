@@ -1,35 +1,36 @@
-import {ChangeSet} from './ChangeSet';
+import {Chunk} from './Chunk';
 
 export class Diff {
-	constructor(files, index, leftFile, rightFile, changeSets) {
-		this.files = files;
-		this.index = index;
-		this.leftFile = leftFile;
-		this.rightFile = rightFile;
-		this.changeSets = changeSets;
+	constructor(comparedFiles, fileMetadata, fileA, fileB, chunks) {
+		this.comparedFiles = comparedFiles;
+		this.fileMetadata = fileMetadata;
+		this.fileA = fileA;
+		this.fileB = fileB;
+		this.chunks = chunks;
 	}
 
 	static parse(diff) {
 		var diffLines = diff.split('\n');
-		var files = diffLines.shift();
-		var index = diffLines.shift();
-		var leftFile = diffLines.shift();
-		var rightFile = diffLines.shift();
-		var changeSets = [];
-		var changeSetIndices;
-		var changeSetLines;
+
+		var comparedFiles = diffLines.shift();
+		var fileMetadata = diffLines.shift();
+		var fileA = diffLines.shift();
+		var fileB = diffLines.shift();
+		var chunks = [];
+		var chunkHeader;
+		var chunkLines;
 
 		do {
-			changeSetIndices = diffLines.shift();
-			changeSetLines = [];
+			chunkHeader = diffLines.shift();
+			chunkLines = [];
 
 			do {
-				changeSetLines.push(diffLines.shift());
+				chunkLines.push(diffLines.shift());
 			} while(diffLines.length && diffLines[0].indexOf('@@') !== 0);
 
-			changeSets.push(new ChangeSet(changeSetIndices, changeSetLines));
+			chunks.push(new Chunk(chunkHeader, chunkLines));
 		} while(diffLines.length);
 
-		return new Diff(files, index, leftFile, rightFile, changeSets);
+		return new Diff(comparedFiles, fileMetadata, fileA, fileB, chunks);
 	}
 }

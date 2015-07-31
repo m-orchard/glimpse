@@ -17,7 +17,7 @@ import {DiffSet} from './element/DiffSet';
 		}
 	};
 
-	req.open("GET", "https://api.github.com/repos/mickylad/glimpse/commits/359c2d9b8ef5408cd983b90a0639d0ff66c2bbea", true);
+	req.open("GET", "https://api.github.com/repos/mickylad/glimpse/commits/dde4c1d0166057e0bf679156eb72e2aef19ff65c", true);
 	req.setRequestHeader("Accept", "application/vnd.github.diff");
 	req.send(null);
 })();

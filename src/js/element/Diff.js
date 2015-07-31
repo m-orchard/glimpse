@@ -1,16 +1,16 @@
 import React from 'react';
-import {ChangeSet} from './ChangeSet';
+import {Chunk} from './Chunk';
 
 export class Diff extends React.Component {
 	render() {
 		var diff = this.props.diff;
 		return <div className="diff" div>
-			<div className="diff-files">{diff.files}</div>
-			<div className="diff-index">{diff.index}</div>
-			<div className="diff-left-file">{diff.leftFile}</div>
-			<div className="diff-right-file">{diff.rightFile}</div>
-			{diff.changeSets.map(function(changeSet) {
-				return <ChangeSet changeSet={changeSet}></ChangeSet>;
+			<div className="diff-compared-files">{diff.comparedFiles}</div>
+			<div className="diff-file-metadata">{diff.fileMetadata}</div>
+			<div className="diff-file-a">{diff.fileA}</div>
+			<div className="diff-file-b">{diff.fileB}</div>
+			{diff.chunks.map(function(chunk) {
+				return <Chunk chunk={chunk}></Chunk>;
 			})}
 		</div>;
 	}
