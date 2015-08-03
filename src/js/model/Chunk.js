@@ -7,11 +7,11 @@ export class Chunk {
 	}
 
 	static parse(chunk) {
-		const header = chunk.shift();
+		const header = chunk.shift().match(Chunk.headerMatcher)[0];
 		return new Chunk(header, chunk);
 	}
 
 	static get headerMatcher() {
-		return /^@@.+@@.*$/;
+		return /^@@.+@@/;
 	}
 }
