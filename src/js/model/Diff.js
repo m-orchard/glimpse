@@ -1,24 +1,27 @@
 import {Chunk} from './Chunk';
 
 export class Diff {
-	constructor(comparedFiles, fileMetadata, fileA, fileB, chunks) {
+	constructor(comparedFiles, mode, fileMetadata, fileA, fileB, chunks) {
 		this.comparedFiles = comparedFiles;
 		this.fileMetadata = fileMetadata;
+		this.mode = mode;
 		this.fileA = fileA;
 		this.fileB = fileB;
 		this.chunks = chunks;
 	}
 
 	static parse(diff) {
-		var diffLines = diff.split('\n');
+		const diffLines = diff.split('\n');
 
-		var comparedFiles = diffLines.shift();
-		var fileMetadata = diffLines.shift();
-		var fileA = diffLines.shift();
-		var fileB = diffLines.shift();
-		var chunks = [];
-		var chunkHeader;
-		var chunkLines;
+		const comparedFiles = diffLines.shift();
+		const mode = diffLines[0].match(Diff.modeMatcher) ? diffLines.shift() : '';
+		const fileMetadata = diffLines.shift();
+		const fileA = diffLines.shift();
+		const fileB = diffLines.shift();
+		const chunks = [];
+
+		let chunkHeader;
+		let chunkLines;
 
 		do {
 			chunkHeader = diffLines.shift();
@@ -26,11 +29,15 @@ export class Diff {
 
 			do {
 				chunkLines.push(diffLines.shift());
-			} while(diffLines.length && diffLines[0].indexOf('@@') !== 0);
+			} while(diffLines.length && !diffLines[0].match(Chunk.headerMatcher));
 
 			chunks.push(new Chunk(chunkHeader, chunkLines));
 		} while(diffLines.length);
 
-		return new Diff(comparedFiles, fileMetadata, fileA, fileB, chunks);
+		return new Diff(comparedFiles, mode, fileMetadata, fileA, fileB, chunks);
+	}
+
+	static get modeMatcher() {
+		return /^(new|deleted) file mode.+$/;
 	}
 }

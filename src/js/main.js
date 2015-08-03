@@ -3,14 +3,14 @@ import {DiffSet as DiffSetModel} from './model/DiffSet';
 import {DiffSet} from './element/DiffSet';
 
 (function() {
-	var req = new XMLHttpRequest();
+	let req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if(req.readyState !== 4) {
 			return;
 		}
 
 		if(req.status === 200) {
-			var diffSet = DiffSetModel.parse(req.responseText);
+			let diffSet = DiffSetModel.parse(req.responseText);
 			React.render(<DiffSet diffSet={diffSet}></DiffSet>, document.querySelector('.container'));
 		} else {
 			// show error;

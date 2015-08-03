@@ -6,11 +6,9 @@ export class DiffSet {
 	}
 
 	static parse(diffSet) {
-		var diffs = diffSet.split('\ndiff --git');
+		const diffs = diffSet.split('\ndiff --git');
 		diffs.shift();
 
-		diffs = diffs.map(Diff.parse);
-
-		return new DiffSet(diffs);
+		return new DiffSet(diffs.map(Diff.parse));
 	}
 }

@@ -3,4 +3,8 @@ export class Chunk {
 		this.header = header;
 		this.lines = lines;
 	}
+
+	static get headerMatcher() {
+		return /^@@.+@@.*$/;
+	}
 }
