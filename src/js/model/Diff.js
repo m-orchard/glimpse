@@ -12,7 +12,6 @@ export class Diff {
 
 	static parse(diff) {
 		const diffLines = diff.split('\n');
-
 		const comparedFiles = diffLines.shift();
 		const mode = diffLines[0].match(Diff.modeMatcher) ? diffLines.shift() : '';
 		const fileMetadata = diffLines.shift();
@@ -20,19 +19,16 @@ export class Diff {
 		const fileB = diffLines.shift();
 		const chunks = [];
 
-		let chunkHeader;
-		let chunkLines;
+		let chunkLength;
+		while(diffLines.length) {
+			chunkLength = 2;
 
-		do {
-			chunkHeader = diffLines.shift();
-			chunkLines = [];
+			while(chunkLength < diffLines.length && !diffLines[chunkLength].match(Chunk.headerMatcher)) {
+				chunkLength++;
+			}
 
-			do {
-				chunkLines.push(diffLines.shift());
-			} while(diffLines.length && !diffLines[0].match(Chunk.headerMatcher));
-
-			chunks.push(new Chunk(chunkHeader, chunkLines));
-		} while(diffLines.length);
+			chunks.push(Chunk.parse(diffLines.splice(0, chunkLength)));
+		}
 
 		return new Diff(comparedFiles, mode, fileMetadata, fileA, fileB, chunks);
 	}
