@@ -1,12 +1,12 @@
 import {Chunk} from './Chunk';
 
 export class Diff {
-	constructor(comparedFiles, mode, fileMetadata, fileA, fileB, chunks) {
+	constructor(comparedFiles, mode, fileMetadata, fileAMarker, fileBMarker, chunks) {
 		this.comparedFiles = comparedFiles;
 		this.fileMetadata = fileMetadata;
 		this.mode = mode;
-		this.fileA = fileA;
-		this.fileB = fileB;
+		this.fileAMarker = fileAMarker;
+		this.fileBMarker = fileBMarker;
 		this.chunks = chunks;
 	}
 
@@ -15,8 +15,8 @@ export class Diff {
 		const comparedFiles = diffLines.shift();
 		const mode = diffLines[0].match(Diff.modeMatcher) ? diffLines.shift() : '';
 		const fileMetadata = diffLines.shift();
-		const fileA = diffLines.shift();
-		const fileB = diffLines.shift();
+		const fileAMarker = diffLines.shift();
+		const fileBMarker = diffLines.shift();
 		const chunks = [];
 
 		let chunkLength;
@@ -30,7 +30,7 @@ export class Diff {
 			chunks.push(Chunk.parse(diffLines.splice(0, chunkLength)));
 		}
 
-		return new Diff(comparedFiles, mode, fileMetadata, fileA, fileB, chunks);
+		return new Diff(comparedFiles, mode, fileMetadata, fileAMarker, fileBMarker, chunks);
 	}
 
 	static get modeMatcher() {

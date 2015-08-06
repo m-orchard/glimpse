@@ -1,17 +1,17 @@
 var gulp = require('gulp');
-var babel = require('babelify');
-var browserify = require('browserify');
-var buffer = require('vinyl-buffer');
-var less = require('gulp-less');
-var source = require('vinyl-source-stream');
-var sourcemaps = require('gulp-sourcemaps');
-var watchify = require('watchify');
 
 /*
- Credit to Dan Harper for original Browserify/Babelify solution.
- https://gist.github.com/danharper/3ca2273125f500429945
+ Credit to Dan Harper for [original Browserify/Babelify solution]
+ {@link https://gist.github.com/danharper/3ca2273125f500429945}.
 */
 function buildJS(watch) {
+	var babel = require('babelify');
+	var browserify = require('browserify');
+	var buffer = require('vinyl-buffer');
+	var source = require('vinyl-source-stream');
+	var sourcemaps = require('gulp-sourcemaps');
+	var watchify = require('watchify');
+
 	var src = browserify('./src/js/main.js', { debug: true }).transform(babel);
 
 	if(watch) {
@@ -39,6 +39,9 @@ function buildJS(watch) {
 }
 
 function buildCSS(watch) {
+	var less = require('gulp-less');
+	var watchify = require('watchify');
+
 	var src = gulp.src('./src/less/**/*.less');
 
 	if(watch) {
