@@ -2,18 +2,18 @@ import React from 'react';
 
 export class ChunkLine extends React.Component {
 	render() {
-		const line = this.props.line;
+		const model = this.props.model;
 
 		let className = 'chunk-line';
-		if(line.addition) {
+		if(model.addition) {
 			className += ' chunk-line-addition';
-		} else if(line.removal) {
+		} else if(model.removal) {
 			className += ' chunk-line-removal';
 		}
 
 		return <div className={className}>
-			<span className="chunk-line-flag">{line.flag}</span>
-			<span className="chunk-line-text">{line.text}</span>
+			<span className="chunk-line-flag">{model.flag}</span>
+			<span className="chunk-line-text">{model.text}</span>
 		</div>;
 	}
 }

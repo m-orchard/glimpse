@@ -11,7 +11,7 @@ import {DiffSet} from './element/DiffSet';
 
 		if(req.status === 200) {
 			let diffSet = DiffSetModel.parse(req.responseText);
-			React.render(<DiffSet diffSet={diffSet}></DiffSet>, document.querySelector('.container'));
+			React.render(<DiffSet model={diffSet}></DiffSet>, document.querySelector('.container'));
 		} else {
 			// show error;
 		}
