@@ -21,7 +21,11 @@ body {
   position: absolute;
   left: 0;
   right: 0;
+  padding: 20px;
   overflow: hidden;
+  transition-property: top, bottom;
+  transition-duration: 0.45s;
+  transition-timing-function: ease-in-out;
 }
 
 .active-diff {
@@ -30,13 +34,13 @@ body {
 }
 
 .before-active-diff {
-  top: auto;
+  top: -100%;
   bottom: 100%;
 }
 
 .after-active-diff {
   top: 100%;
-  bottom: auto;
+  bottom: -100%;
 }
 
 .diff-contents {
