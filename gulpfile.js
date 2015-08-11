@@ -39,6 +39,7 @@ function buildJS(watch) {
 }
 
 function buildCSS(watch) {
+	var concat = require('gulp-concat-css');
 	var less = require('gulp-less');
 	var watchify = require('watchify');
 
@@ -50,6 +51,7 @@ function buildCSS(watch) {
 
 	function build() {
 		src.pipe(less())
+			.pipe(concat('glimpse.css'))
 			.pipe(gulp.dest('./build'));
 	}
 

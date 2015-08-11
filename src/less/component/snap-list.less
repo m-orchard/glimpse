@@ -1,0 +1,31 @@
+.snap-list {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.snap-list-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  overflow: hidden;
+  transition-property: top, bottom;
+  transition-duration: 0.45s;
+  transition-timing-function: ease-in-out;
+}
+
+.snap-list-item-active {
+  top: 0;
+  bottom: 0;
+}
+
+.snap-list-item-before-active {
+  top: -100%;
+  bottom: 100%;
+}
+
+.snap-list-item-after-active {
+  top: 100%;
+  bottom: -100%;
+}

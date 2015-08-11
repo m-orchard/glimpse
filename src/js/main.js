@@ -1,6 +1,7 @@
 import React from 'react';
-import {DiffSet as DiffSetModel} from './model/DiffSet';
-import {DiffSet} from './element/DiffSet';
+import {DiffSet as DiffSet} from './model/DiffSet';
+import {Diff} from './element/model/Diff';
+import {SnapList} from './element/component/SnapList';
 
 (function() {
 	let req = new XMLHttpRequest();
@@ -10,8 +11,8 @@ import {DiffSet} from './element/DiffSet';
 		}
 
 		if(req.status === 200) {
-			let diffSet = DiffSetModel.parse(req.responseText);
-			React.render(<DiffSet model={diffSet}></DiffSet>, document.querySelector('.container'));
+			let diffSet = DiffSet.parse(req.responseText);
+			React.render(<SnapList items={diffSet.diffs} type={Diff}></SnapList>, document.querySelector('.container'));
 		} else {
 			// show error;
 		}

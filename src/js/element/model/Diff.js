@@ -11,17 +11,7 @@ export class Diff extends React.Component {
 	render() {
 		const model = this.props.model;
 
-		let className = 'diff';
-		if(this.state.position > 0) {
-			className += ' after-active-diff';
-		} else if(this.state.position < 0) {
-			className += ' before-active-diff';
-		} else {
-			className += ' active-diff';
-		}
-
-		return <div className={className}>
-			<div className="diff-contents" ref={(contents) => this._contents = contents}>
+		return <div className="diff" ref={(contents) => this._contents = contents}>
 				<div className="diff-compared-files">{model.comparedFiles}</div>
 				<div className="diff-mode">{model.mode}</div>
 				<div className="diff-file-metadata">{model.fileMetadata}</div>
@@ -30,8 +20,7 @@ export class Diff extends React.Component {
 				{model.chunks.map(function(chunk, index) {
 					return <Chunk model={chunk} key={index}></Chunk>;
 				})}
-			</div>
-		</div>;
+			</div>;
 	}
 
 	isScrolledToTop() {
