@@ -1,10 +1,10 @@
 export function Debouncer(context, func, time) {
-	function debounce() {
-		let innerFunc = context[func];
+	function _debounce() {
+		const innerFunc = context[func];
 		let callTimeout;
 
 		context[func] = function() {
-			let args = arguments;
+			const args = arguments;
 
 			if(callTimeout) {
 				window.clearTimeout(callTimeout);
@@ -17,5 +17,5 @@ export function Debouncer(context, func, time) {
 		}
 	}
 
-	debounce();
+	_debounce();
 }
